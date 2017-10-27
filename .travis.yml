@@ -1,0 +1,25 @@
+language: cpp
+dist: trusty
+sudo: false
+
+compiler:
+  - gcc
+  - clang
+
+env:
+- CONFIG="" # default
+- CONFIG="--without-shared --with-static"
+- CONFIG="--without-mmx"
+- CONFIG="--without-fastcopy"
+- CONFIG="--force-inline"
+
+script: 
+    - ./configure ${CONFIG} ${LIBDIR}
+    - make
+    - make check > output | true
+    - cat output
+    - if grep -q '\-\-\-' output; then exit 1; fi
+    
+os:
+  - linux
+
